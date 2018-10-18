@@ -1,5 +1,8 @@
 package echoserver;
 
+import java.net.*;
+import java.io.*;
+
 public class EchoServer {
     public static final int portNumber = 6013;
 
@@ -14,21 +17,21 @@ public class EchoServer {
                 Socket client = sock.accept();
                 System.out.println("Got a request!");
 
-                // Construct a writer so we can write to the socket, thereby
-                // sending something back to the client.
-                PrintWriter writer = new PrintWriter(client.getOutputStream(), true);
+                InputStream clientRequest = client.getInputStream();
+                OutputStream serverResponse = client.getOutputStream();
 
-                // Send the current date back tothe client.
-                writer.println(new java.util.Date().toString());
+                int tempByte;
+                while((tempByte = clientRequest.read()) != -1) {
+                  serverResponse.write(tempByte);
+                }
 
-                // Close the client socket since we're done.
-                client.close();
-            }
-            // *Very* minimal error handling.
-        } catch (IOException ioe) {
-            System.out.println("We caught an unexpected exception");
-            System.err.println(ioe);
-        }
+                client.shutdownOutput();
+
+      }
     }
-}
+     catch(IOException ioe) {
+      System.out.println("We caught an unexpected exception");
+      System.err.println(ioe);
+    }
+  }
 }
