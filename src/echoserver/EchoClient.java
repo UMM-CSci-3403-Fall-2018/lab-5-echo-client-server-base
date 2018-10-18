@@ -17,11 +17,11 @@ public class EchoClient {
         try {
             // Connect to the server
             Socket socket = new Socket(server, portNumber);
+            // Get the input and output stream
             OutputStream out = socket.getOutputStream();
             InputStream in = socket.getInputStream();
-            //InputStream input = socket.getInputStream();
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
+            // Write data from standard input to the server
             // Print all the input we receive from the server
             int system;
             while((system = System.in.read()) != -1) {
