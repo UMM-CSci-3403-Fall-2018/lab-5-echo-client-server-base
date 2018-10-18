@@ -1,9 +1,12 @@
 package echoserver;
 
+import java.io.*;
+import java.net.*;
+
 public class EchoClient {
     public static final int portNumber = 6013;
 
-    public static void main(Strings[] args) {
+    public static void main(String[] args) {
         String server;
         if (args.length == 0) {
             server = "127.0.0.1";
@@ -14,19 +17,22 @@ public class EchoClient {
         try {
             // Connect to the server
             Socket socket = new Socket(server, portNumber);
-
-            // Get the input stream so we can read from that socket
-            InputStream input = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            OutputStream out = socket.getOutputStream();
+            InputStream in = socket.getInputStream();
+            //InputStream input = socket.getInputStream();
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
             // Print all the input we receive from the server
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+            int system;
+            while((system = System.in.read()) != -1) {
+              out.write(system);
+              int response = in.read();
+              System.out.write(response);
+      }
 
             // Close the socket when we're done reading from it
-            socket.close();
+            socket.shutdownOutput();
+            System.out.flush();
 
             // Provide some minimal error handling.
         } catch (ConnectException ce) {
